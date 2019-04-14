@@ -202,26 +202,28 @@ $(function(){
 				dropload.resetload();
 				return;
 			}
-			
-            $.ajax({
-                type: 'GET',
-				url: '/like.http?action=project&projectid='+next+'&code='+code,
-				//url: '/index/project.php?projectid='+next,
-                dataType: 'json',
-                success: function(data){
-					next = data.data.next;
-					var result = addItems(data.data.entries);
-					setTimeout(function(){
-						$('#list').append(result);
+			else
+			{
+				$.ajax({
+					type: 'GET',
+					url: '/like.http?action=project&projectid='+next+'&code='+code,
+					//url: '/index/project.php?projectid='+next,
+					dataType: 'json',
+					success: function(data){
+						next = data.data.next;
+						var result = addItems(data.data.entries);
+						setTimeout(function(){
+							$('#list').append(result);
+							dropload.resetload();
+						},1000);					
+					},
+					error: function(xhr, type){
+						alert('Ajax error!');
+						// 即使加载出错，也得重置
 						dropload.resetload();
-					},1000);					
-                },
-                error: function(xhr, type){
-                    alert('Ajax error!');
-                    // 即使加载出错，也得重置
-                    dropload.resetload();
-                }
-            });
+					}
+				});			
+			}
         }
     });
 });
